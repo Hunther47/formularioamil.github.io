@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Plano de Saúde</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #formulario {
+      width: 21cm;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+
+    h1 {
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    select, input {
+      margin-bottom: 10px;
+      width: 100%;
+      padding: 8px;
+    }
+
+    #faixasEtarias {
+      text-align: center;
+    }
+
+    .faixaEtaria {
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    #interesse {
+      text-align: center;
+    }
+
+    #botoesInteresse {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+
+    #erroInteresse {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="formulario">
+
+    <h1>Simulação de Plano de Saúde</h1>
+
+    <label for="nomeCompleto">Nome Completo:</label>
+    <input type="text" id="nomeCompleto">
+
+    <br>
+
+    <label for="numeroCRM">Número do CRM:</label>
+    <input type="text" id="numeroCRM">
+
+    <br>
+
+    <label for="siglaEstado">Sigla do Estado:</label>
+    <select id="siglaEstado">
+      <!-- Opções de siglas de estado -->
+      <option value="AC">AC</option>
+      <option value="AL">AL</option>
+      <option value="AP">AP</option>
+      <option value="AM">AM</option>
+      <option value="BA">BA</option>
+      <option value="CE">CE</option>
+      <option value="DF">DF</option>
+      <option value="ES">ES</option>
+      <option value="GO">GO</option>
+      <option value="MA">MA</option>
+      <option value="MT">MT</option>
+      <option value="MS">MS</option>
+      <option value="MG">MG</option>
+      <option value="PA">PA</option>
+      <option value="PB">PB</option>
+      <option value="PR">PR</option>
+      <option value="PE">PE</option>
+      <option value="PI">PI</option>
+      <option value="RJ">RJ</option>
+      <option value="RN">RN</option>
+      <option value="RS">RS</option>
+      <option value="RO">RO</option>
+      <option value="RR">RR</option>
+      <option value="SC">SC</option>
+      <option value="SP">SP</option>
+      <option value="SE">SE</option>
+      <option value="TO">TO</option>
+    </select>
+
+    <br>
+
+    <label for="telefone">Telefone:</label>
+    <input type="tel" id="telefone" oninput="formatarTelefone(this)" placeholder="(xx) xxxxx-xxxx">
+
+    <br>
+
+    <label for="tipoPlano">Tipo do Plano:</label>
+    <select id="tipoPlano">
+      <option value="0">Amil S380</option>
+      <option value="1">Amil S580</option>
+      <option value="2">Amil One S1500 R2</option>
+      <option value="3">Amil One S2500 R1</option>
+      <option value="4">Amil One S6500 R1</option>
+    </select>
+
+    <br>
+
+    <label for="numDependentes">Número de Dependentes:</label>
+    <input type="number" id="numDependentes" min="0" value="0" oninput="gerarFaixasEtarias()">
+
+    <br>
+
+    <h2>Faixa Etária dos Dependentes:</h2>
+
+    <div id="faixasEtarias"></div>
+
+    <br>
+
+    <button onclick="calcularSimulacao()">Calcular</button>
+
+    <br>
+
+    <h3>Resultado da Simulação:</h3>
+    <p id="resultado">N/A</p>
+
+    <br>
+
+    <label for="interesse">Tem interesse?</label>
+    <div id="botoesInteresse">
+      <button onclick="setInteresse(true)">Sim</button>
+      <button onclick="setInteresse(false)">Não</button>
+    </div>
+    <p id="erroInteresse"></p>
+
+  </div>
+
+  <script>
+    function formatarTelefone(input) {
+      var numeroLimpo = input.value.replace(/\D/g, '');
+      var telefoneFormatado = '(' + numeroLimpo.slice(0, 2) + ') ' + numeroLimpo.slice(2, 7) + '-' + numeroLimpo.slice(7, 11);
+      input.value = telefoneFormatado;
+    }
+
+    function gerarFaixasEtarias() {
+      var numDependentes = document.getElementById("numDependentes").value;
+      var divFaixas = document.getElementById("faixasEtarias");
+
+      divFaixas.innerHTML = "";
+
+      for (var i = 1; i <= numDependentes; i++) {
+        var label = document.createElement("label");
+        label.textContent = "Faixa Etária do Dependente " + i + ": ";
+        
+        var select = document.createElement("select");
+        select.classList.add("faixaEtaria");
+        select.innerHTML = `
+          <option value="0-18">0-18</option>
+          <option value="19-23">19-23</option>
+          <option value="24-28">24-28</option>
+          <option value="29-33">29-33</option>
+          <option value="34-38">34-38</option>
+          <option value="39-43">39-43</option>
+          <option value="44-48">44-48</option>
+          <option value="49-53">49-53</option>
+          <option value="54-58">54-58</option>
+          <option value="59+">59+</option>
+        `;
+
+        divFaixas.appendChild(label);
+        divFaixas.appendChild(select);
+        divFaixas.appendChild(document.createElement("br"));
+      }
+    }
+
+    function calcularSimulacao() {
+      var tipoPlano = document.getElementById("tipoPlano").value;
+      var numDependentes = parseInt(document.getElementById("numDependentes").value);
+      var faixasEtarias = document.getElementsByClassName("faixaEtaria");
+
+      var matrizPrecos = [
+        [411.41, 545.77, 1043.31, 1196.08, 1648.47],
+        [481.35, 638.55, 1220.67, 1399.41, 1928.71],
+        [587.25, 779.03, 1489.22, 1707.28, 2353.03],
+        [704.7, 934.84, 1787.06, 2048.74, 2823.64],
+        [739.94, 981.58, 1876.41, 2151.18, 2964.82],
+        [813.93, 1079.74, 2064.05, 2366.30, 3261.31],
+        [1017.41, 1349.68, 2580.06, 2957.88, 4076.63],
+        [1119.15, 1484.65, 2838.07, 3253.67, 4484.29],
+        [1398.94, 1855.81, 3547.59, 4067.09, 5605.36],
+        [2448.15, 3247.67, 6208.28, 7117.41, 9809.38]
+      ];
+
+      var resultado = 0;
+
+      for (var i = 0; i < numDependentes; i++) {
+        var faixaEtaria = faixasEtarias[i].value;
+        var indiceFaixa;
+
+        switch (faixaEtaria) {
+          case "0-18":
+            indiceFaixa = 0;
+            break;
+          case "19-23":
+            indiceFaixa = 1;
+            break;
+          case "24-28":
+            indiceFaixa = 2;
+            break;
+          case "29-33":
+            indiceFaixa = 3;
+            break;
+          case "34-38":
+            indiceFaixa = 4;
+            break;
+          case "39-43":
+            indiceFaixa = 5;
+            break;
+          case "44-48":
+            indiceFaixa = 6;
+            break;
+          case "49-53":
+            indiceFaixa = 7;
+            break;
+          case "54-58":
+            indiceFaixa = 8;
+            break;
+          case "59+":
+            indiceFaixa = 9;
+            break;
+          default:
+            console.error("Faixa etária não reconhecida:", faixaEtaria);
+            return;
+        }
+
+        resultado += matrizPrecos[indiceFaixa][parseInt(tipoPlano)];
+      }
+
+      document.getElementById("resultado").textContent = "O resultado final é: " + resultado;
+
+      var interesseSim = document.getElementById("interesseSim").checked;
+      var interesseNao = document.getElementById("interesseNao").checked;
+      var erroInteresse = document.getElementById("erroInteresse");
+
+      if (!interesseSim && !interesseNao) {
+        erroInteresse.textContent = "Por favor, selecione se tem interesse.";
+      } else {
+        erroInteresse.textContent = "";
+      }
+    }
+
+    function setInteresse(interesse) {
+      document.getElementById("interesseSim").checked = interesse;
+      document.getElementById("interesseNao").checked = !interesse;
+    }
+  </script>
+
+</body>
+</html> 
+
+
+
