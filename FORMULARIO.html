@@ -98,9 +98,10 @@
     <label for="numeroCRM" class="form-label">Número do CRM:</label>
     <input type="number" id="numeroCRM"  class="form-control mb-3" placeholder="Apenas Números">
 
-
-    <label for="siglaEstado" class="form-label">Sigla do Estado:</label>
-    <select id="siglaEstado" class="form-select">
+<div class="form-row aling-items-center">
+  <div class="col-auto my-1">
+    <label for="siglaEstado" class="mr-sm-2 sr-only">Sigla do Estado:</label>
+    <select id="siglaEstado" class="custom-select mr-sm-2">
       <!-- Opções de siglas de estado -->
       <option value="AC">AC</option>
       <option value="AL">AL</option>
@@ -130,18 +131,24 @@
       <option value="SE">SE</option>
       <option value="TO">TO</option>
     </select>
-
+    </div>
+  </div>
     <label for="telefone" class="form-label mt-3">Telefone:</label>
     <input type="tel" id="telefone" class="form-control" oninput="formatarTelefone(this)" placeholder="(xx) xxxxx-xxxx">
 
+    <div class="form-row aling-items-center">
+      <div class="col-auto my-1">
     <label class="form-select" for="tipoPlano" class="form-label mt-3">Tipo do Plano:</label>
-    <select id="tipoPlano">
+    <select id="tipoPlano"  class="custom-select mr-sm-2">
       <option value="0">Amil S380</option>
       <option value="1">Amil S580</option>
       <option value="2">Amil One S1500 R2</option>
       <option value="3">Amil One S2500 R1</option>
       <option value="4">Amil One S6500 R1</option>
     </select>
+    
+  </div>
+</div>
 
     <br>
 
@@ -189,6 +196,7 @@
         
         var select = document.createElement("select");
         select.classList.add("faixaEtaria");
+        select.className = `custom-select mr-sm-2`
         select.innerHTML = `
           <option value="0-18">0-18</option>
           <option value="19-23">19-23</option>
